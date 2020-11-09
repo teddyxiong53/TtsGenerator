@@ -9,4 +9,5 @@ output.log
 test.py
 *.zip
 *.spec
+param.json
 

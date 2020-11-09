@@ -1,6 +1,7 @@
 #coding: utf-8
 
 import utils
+import os, json
 
 # 版本号
 SOFTWARE_VERSION = "V1.0"
@@ -16,20 +17,28 @@ AUDIO_OUTPUT_DIR='./audio_output/'
 
 
 # 音频配置
-SPEED = 5
-VOLUME = 5
-PERSON = 4
-TONE = 5
-AUE = 6
+globalParam = {
+    'speed': 5,
+    'volume': 5,
+    'tone': 5,
+    'person': 0,
+    'format': 1
+}
+
 # 结果判断
 
-def initConfig():
-    param = utils.parse_json('param.json')
-    SPEED = param['语速']
-    VOLUME = param['音量']
-    TONE = param['音调']
-    PERSON = param['发音人']
-    AUE = param['格式']
+def readConfig():
+    global globalParam
+    if os.path.exists('param.json'):
+        with open('param.json', encoding='utf-8') as f:
+            globalParam = json.load(f)
+
+def writeConfig():
+    global globalParam
+    with open('param.json', 'w', encoding='utf-8') as f:
+        json.dump(globalParam, f)
 
 if __name__ == '__main__':
-    initConfig()
+    readConfig()
+    globalParam['speed'] = 6
+    writeConfig()

@@ -17,7 +17,7 @@ import wx.xrc
 class MainFrame ( wx.Frame ):
 
 	def __init__( self, parent ):
-		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"会议音箱测试程序V1.0", pos = wx.DefaultPosition, size = wx.Size( 600,400 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.MINIMIZE|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
+		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 700,400 ), style = wx.CAPTION|wx.CLOSE_BOX|wx.MINIMIZE|wx.MINIMIZE_BOX|wx.SYSTEM_MENU|wx.TAB_TRAVERSAL )
 
 		self.SetSizeHints( wx.Size( -1,-1 ), wx.Size( -1,-1 ) )
 
@@ -39,6 +39,55 @@ class MainFrame ( wx.Frame ):
 
 		bSizer2 = wx.BoxSizer( wx.VERTICAL )
 
+		bSizer4 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.m_staticText2 = wx.StaticText( self, wx.ID_ANY, u"发声人", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText2.Wrap( -1 )
+
+		bSizer4.Add( self.m_staticText2, 0, wx.ALL, 5 )
+
+		m_choicePersonChoices = [ u"普通女声", u"普通男声", u"情感女声", u"情感男声" ]
+		self.m_choicePerson = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_choicePersonChoices, 0 )
+		self.m_choicePerson.SetSelection( 0 )
+		bSizer4.Add( self.m_choicePerson, 0, wx.ALL, 5 )
+
+		self.m_staticText3 = wx.StaticText( self, wx.ID_ANY, u"语速", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText3.Wrap( -1 )
+
+		bSizer4.Add( self.m_staticText3, 0, wx.ALL, 5 )
+
+		self.m_sliderSpeed = wx.Slider( self, wx.ID_ANY, 5, 0, 9, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_MIN_MAX_LABELS|wx.SL_VALUE_LABEL )
+		bSizer4.Add( self.m_sliderSpeed, 0, wx.ALL, 5 )
+
+		self.m_staticText4 = wx.StaticText( self, wx.ID_ANY, u"音调", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText4.Wrap( -1 )
+
+		bSizer4.Add( self.m_staticText4, 0, wx.ALL, 5 )
+
+		self.m_sliderTone = wx.Slider( self, wx.ID_ANY, 5, 0, 9, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_MIN_MAX_LABELS|wx.SL_VALUE_LABEL )
+		bSizer4.Add( self.m_sliderTone, 0, wx.ALL, 5 )
+
+		self.m_staticText5 = wx.StaticText( self, wx.ID_ANY, u"音量", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText5.Wrap( -1 )
+
+		bSizer4.Add( self.m_staticText5, 0, wx.ALL, 5 )
+
+		self.m_sliderVolume = wx.Slider( self, wx.ID_ANY, 5, 0, 15, wx.DefaultPosition, wx.DefaultSize, wx.SL_HORIZONTAL|wx.SL_MIN_MAX_LABELS|wx.SL_VALUE_LABEL )
+		bSizer4.Add( self.m_sliderVolume, 0, wx.ALL, 5 )
+
+		self.m_staticText6 = wx.StaticText( self, wx.ID_ANY, u"格式", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText6.Wrap( -1 )
+
+		bSizer4.Add( self.m_staticText6, 0, wx.ALL, 5 )
+
+		m_choiceFormatChoices = [ u"mp3", u"wav" ]
+		self.m_choiceFormat = wx.Choice( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_choiceFormatChoices, 0 )
+		self.m_choiceFormat.SetSelection( 1 )
+		bSizer4.Add( self.m_choiceFormat, 0, wx.ALL, 5 )
+
+
+		bSizer2.Add( bSizer4, 1, wx.EXPAND, 5 )
+
 		bSizer21 = wx.BoxSizer( wx.HORIZONTAL )
 
 		self.m_buttonGenTts = wx.Button( self, wx.ID_ANY, u"生成音频文件", wx.DefaultPosition, wx.Size( 400,50 ), 0 )
@@ -52,7 +101,7 @@ class MainFrame ( wx.Frame ):
 
 		gSizer2 = wx.GridSizer( 1, 1, 0, 0 )
 
-		self.m_textCtrlInputText = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 580,230 ), 0 )
+		self.m_textCtrlInputText = wx.TextCtrl( self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 680,200 ), 0 )
 		gSizer2.Add( self.m_textCtrlInputText, 0, wx.ALL, 5 )
 
 
@@ -71,6 +120,11 @@ class MainFrame ( wx.Frame ):
 		self.Bind( wx.EVT_CLOSE, self.OnClose )
 		self.Bind( wx.EVT_MENU, self.OnMenuExit, id = self.m_menuItemExit.GetId() )
 		self.Bind( wx.EVT_MENU, self.OnMenuAbout, id = self.m_menuItemAbout.GetId() )
+		self.m_choicePerson.Bind( wx.EVT_CHOICE, self.OnChoicePerson )
+		self.m_sliderSpeed.Bind( wx.EVT_SCROLL, self.OnScrollSpeed )
+		self.m_sliderTone.Bind( wx.EVT_SCROLL, self.OnScrollTone )
+		self.m_sliderVolume.Bind( wx.EVT_SCROLL, self.OnScrollVolume )
+		self.m_choiceFormat.Bind( wx.EVT_CHOICE, self.OnChoiceFormat )
 		self.m_buttonGenTts.Bind( wx.EVT_BUTTON, self.OnButtonGenTts )
 		self.m_buttonOpenDir.Bind( wx.EVT_BUTTON, self.OnButtonOpenDir )
 
@@ -86,6 +140,21 @@ class MainFrame ( wx.Frame ):
 		event.Skip()
 
 	def OnMenuAbout( self, event ):
+		event.Skip()
+
+	def OnChoicePerson( self, event ):
+		event.Skip()
+
+	def OnScrollSpeed( self, event ):
+		event.Skip()
+
+	def OnScrollTone( self, event ):
+		event.Skip()
+
+	def OnScrollVolume( self, event ):
+		event.Skip()
+
+	def OnChoiceFormat( self, event ):
 		event.Skip()
 
 	def OnButtonGenTts( self, event ):
