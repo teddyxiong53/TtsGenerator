@@ -1,0 +1,12 @@
+.idea
+__pycache__
+audio_output
+dist
+build
+*.log
+*.pyc
+output.log
+test.py
+*.zip
+*.spec
+
